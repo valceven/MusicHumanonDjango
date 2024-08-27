@@ -16,17 +16,27 @@ module.exports = {
           loader: "babel-loader",
         },
       },
+      {
+        test: /\.css$/, // Add this rule to handle CSS files
+        use: [
+          "style-loader", // Injects CSS into the DOM
+          "css-loader", // Interprets `@import` and `url()` like `import/require()`
+        ],
+      },
     ],
   },
   optimization: {
-    minimize: true,
+    minimize: process.env.NODE_ENV === "production",
   },
   plugins: [
     new webpack.DefinePlugin({
-      "process.env.NODE_ENV": JSON.stringify("production"),
+      "process.env.NODE_ENV": JSON.stringify(
+        process.env.NODE_ENV || "development"
+      ),
     }),
   ],
   stats: {
     errorDetails: true,
   },
+  mode: process.env.NODE_ENV === "production" ? "production" : "development",
 };
